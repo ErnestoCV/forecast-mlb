@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100&family=Roboto:wght@100&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+
+    <title>FORECAST</title>
+  </head>
+  <body onload="loaded()">
+    <main>
+      <div class="center">
+        <div class="element">
+          <h1>Pronóstico</h1>
+          <textarea
+            name="forecast"
+            id="forecast"
+            cols="40"
+            rows="18"
+          ></textarea>
+        </div>
+        <div class="element">
+          <h1>Resultado</h1>
+          <textarea
+            name="results"
+            id="results"
+            cols="40"
+            rows="18"
+            onchange="saveResults()"
+          ></textarea>
+        </div>
+      </div>
+      <button class="button" onclick="calculatePoints()">Calcular</button>
+      <div class="center">
+        <div class="element">
+          <h1>Pts</h1>
+          <label id="points">0</label>
+        </div>
+        <div class="element">
+          <h1>Runs</h1>
+          <label id="runs">0</label>
+        </div>
+      </div>
+    </main>
+
+    <script src="main.js"></script>
+    <script src="loading.js" defer></script>
+    <script src="checkPoints.js"></script>
+    <script src="convertPoints.js"></script>
+    <script src="buildingValues.js"></script>
+    <script src="checkBonus.js"></script>
+  </body>
+</html>

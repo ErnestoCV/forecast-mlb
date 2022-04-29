@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100&family=Roboto:wght@100&display=swap" rel="stylesheet">
+  <style type="text/css">
+    body {
+      background-color: cornflowerblue;
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1 {
+      color: white;
+      margin: 0 auto;
+    }
+
+    input {
+      margin-top: 2px;
+      width: 40px;
+    }
+
+    button {
+      margin: 10px auto;
+      display: block;
+    }
+
+    .center {
+      display: block;  
+    }
+
+    .element {
+      display: flex;
+      flex-direction: column;
+      margin: 2px 4px;
+
+    }
+
+    label {  
+      color: white;
+      font-size: 100px;
+      padding: 5px;
+      text-align: center;  
+    }
+
+    textarea {
+      border-radius: 4px;
+      border: 1px solid #1652F0;
+    }
+
+
+
+
+    /*Internet CSS*/
+
+    .button {
+      appearance: button;
+      background-color: #1652F0;
+      border: 1px solid #1652F0;
+      border-radius: 4px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: Roboto,sans-serif;
+      font-size: 14px;
+      line-height: 1.15;
+      overflow: visible;
+      padding: 12px 16px;
+      position: relative;
+      text-align: center;
+      text-transform: none;
+      transition: all 80ms ease-in-out;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: fit-content;
+    }
+
+    @media only screen and (min-width: 768px){
+      .center {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .button:disabled {
+      opacity: .5;
+    }
+
+    .button:focus {
+      outline: 0;
+    }
+
+    .button:hover {
+      background-color: #0A46E4;
+      border-color: #0A46E4;
+    }
+
+    .button:active {
+      background-color: #0039D7;
+      border-color: #0039D7;
+    }
+
+  </style>
+
+  <title>FORECAST</title>
+</head>
+<body onload="loaded()">
+  <main>
+    <div class="center">
+      <div class="element">
+        <h1>Pronóstico</h1>
+        <textarea
+        name="forecast"
+        id="forecast"
+        cols="40"
+        rows="18"
+        ></textarea>
+      </div>
+      <div class="element">
+        <h1>Resultado</h1>
+        <textarea name="results" id="results" cols="40" rows="18" onchange="saveResults()"></textarea>
+      </div>
+    </div>
+    <button class="button" onclick="calculatePoints()">Calcular</button>    
+    <div class="center">
+      <div class="element">
+        <h1>Pts</h1>
+        <label id="points">0</label>  
+      </div>
+      <div class="element">
+        <h1>Runs</h1>
+        <label id="runs">0</label> 
+      </div>
+
+    </div>
+    
+
+  </main>
+
+  <script type="text/javascript">
+    function calculatePoints() {
+
+      const [points, textareaForecast] = buildingValues();
+
+      if(points.length !== 0){
+        document.getElementById('points').innerHTML = points;
+        document.getElementById('forecast').value = textareaForecast;
+        document.getElementById('runs').innerHTML = convertPtsIntoRuns(points);    
+      }
+
+
+
+
+    }
+
+    function buildingValues() {
+      const ID_FORECAST = 'forecast';
+      const ID_RESULT = 'results';
+
+      const forecast = getValueById(ID_FORECAST);
+      const results = getValueById(ID_RESULT);
+
+      let points = [];
+      let bonus = [];
+      let textareaForecast = '';
+      let totalPoints = 0;
+
+
+      if (forecast.length === 0 || results.length === 0) {
+        alert('Arregle los datos')
+      } else {
+
+        const [myGames, myBonus] = getArrayById(ID_FORECAST);
+        const [gamesResults, bonusResults] = getArrayById(ID_RESULT);
+
+        points = checkPoints(myGames, gamesResults);
+        bonus  = bonusPoints(myBonus, bonusResults);
+
+        [points, textareaForecast] = buildingResultValues(points, bonus, myGames, myBonus);
+
+
+
+
+
+
+      }
+
+      return [points, textareaForecast];
+    }
+
+    function checkPoints(games, gamesResults) {
+
+      let index = 0;
+      let points = [];
+
+      while (index < games.length && games[index] !== '') {
+
+        points[index] = checkTeamWin(games[index], gamesResults[index]) +
+        checkRunUpOrDown(games[index], gamesResults[index]) +
+        checkEqualNumberOfRuns(games[index], gamesResults[index]);
+        
+        index++;
+      };
+
+      return points;
+    }
+
+    function bonusPoints(bonus, bonusResults) {
+
+     let index = 0;
+     let points = [];
+
+     while(index < bonus.length && bonus[index] !== '') {
+
+      if(cleanElement(bonus[index],bonus[index].split(' ').length - 1, 'bonus').toLowerCase() === cleanElement(bonusResults[index],bonusResults[index].split(' ').length - 1, 'bonus').toLowerCase()) {
+
+        points.push(5);
+
+      } else {
+
+        points.push(0);
+      }
+
+      index++;
+
+    }
+
+    return points;
+
+  }
+
+  function buildingResultValues(points, bonus, myGames, myBonus) {
+    let [totalPoints,textareaGames] = buildingPoints(points,myGames);
+    let [totalBonusPoints, textareaBonus] = buildingBonus(bonus, myBonus);
+    
+
+    return [totalPoints+totalBonusPoints,textareaGames+"\nBonus\n"+textareaBonus] ;
+
+  }
+
+  function buildingPoints(points, description) {
+
+    let sumPoints = 0;
+    let textareaForecast = '';
+
+    let index = 0;
+
+    while(index < description.length && description[index] !== '') {
+
+      textareaForecast += description[index]+" ["+points[index]+"]\n";
+      sumPoints += points[index];
+
+      index++;
+
+    }
+
+    return [sumPoints, textareaForecast];
+  }
+
+  function buildingBonus(bonus, description) {
+    let sumPoints = 0;
+    let textareaForecast = '';
+
+    let index = 0;
+
+    while(index < description.length && description[index] !== '') {
+
+      textareaForecast += description[index]+" ["+bonus[index]+"]\n";
+      sumPoints += bonus[index];
+
+      index++;
+
+    }
+
+    return [sumPoints, textareaForecast];
+  }
+
+  function buildingTextarea(points, game) {
+    return game +" ["+points+"]\n";
+  }
+
+  function getArrayById(id) {
+    let games = getValueById(id).split('\nBonus\n')[0].split('\n');
+    let bonus = getValueById(id).split('\nBonus\n')[1].split('\n');
+
+    return [games,bonus];    
+
+  }
+
+  function getValueById(id) {
+    return document.getElementById(id).value;
+  }
+
+  function checkTeamWin(myResult, result) {
+
+    return cleanElement(myResult, 0,'game') === cleanElement(result, 0,'game') ? 2 : 0;
+
+  }
+
+  function checkRunUpOrDown(myResult, result) {
+
+    const [myRuns, resultRuns] = getMyRunsAndResultRuns(myResult, result);
+
+
+    if (myRuns <= 8 && resultRuns <= 8) {
+      return 2;
+    }
+
+    if (myRuns >= 9 && resultRuns >= 9) {
+      return 2;
+    }
+
+    return 0;
+
+  }
+
+  function checkEqualNumberOfRuns(myResult, result) {
+
+    const [myRuns, resultRuns] = getMyRunsAndResultRuns(myResult, result);
+
+    return myRuns === resultRuns ? 2 : 0;
+
+  }
+
+  function cleanElement(element, positionToClean, option) {
+
+    const value = element.split(' ')[positionToClean].replace('(', '').replace(')', '');
+
+    if(option === 'game'){
+      return Number.parseInt(value);    
+    }
+
+    return value;    
+
+  }
+
+  function getMyRunsAndResultRuns(myResult, result) {
+    return [cleanElement(myResult, myResult.split(' ').length - 1,'game'), cleanElement(result, result.split(' ').length - 1,'game')]
+  }
+
+  function convertPtsIntoRuns(points) {
+
+    if(points <= 10) {
+      return 0;
+    }
+
+    if(points <= 13) {
+      return 1;
+    }
+
+    if(points <= 16) {
+      return 2;
+    }
+
+    if(points <= 19) {
+      return 3;      
+    }
+
+    if(points <= 22) {
+      return 4;
+    }
+
+    if(points <= 25) {
+      return 5;
+    }
+
+    if(points <= 28) {
+      return 6;
+    }
+
+    if(points <= 31) {
+      return 7;
+    }
+
+    if(points <= 34) {
+      return 8;
+    }
+
+    if(points <= 37) {
+      return 9;
+    }
+
+    return 13;
+
+  }
+
+  function saveResults() {
+    localStorage.setItem('results',document.getElementById('results').value);
+  }
+
+  function loaded() {    
+    document.getElementById('results').value = localStorage.getItem('results');
+  }
+</script>
+
+</body>
+</html>
