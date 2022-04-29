@@ -1,6 +1,5 @@
 El admin del grupo publica esto:
 
-
 (1-2) Pirates vs Padres ()
 (1-2) Marlins vs Mariners ()
 (1-2) Orioles vs Boston ()
@@ -16,7 +15,7 @@ Bonus
 1. En el juego Kansas vs Yankees habrán más jonrones que en el juego Toronto vs Astros (Si - No)
 2. En el juego Mets vs Phillies se pegarán más de 15 hits entre los 2 equipos (Si - No)
 
-Cada integrante elige que equipo piensa que va a ganar (1-2), el primero o el segundo; luego en el segundo paréntesis () se pone la cantidad de carreras que se estima que hagan ambos equipos y por último en los Bonus se pone Si o No en dependencia de lo que uno estime que va a pasar.
+10 juegos, uno debajo del otro y 2 Bonus. Cada integrante elige que equipo piensa que va a ganar (1-2), el primero o el segundo; luego en el segundo paréntesis () se pone la cantidad de carreras que se estima que hagan ambos equipos y por último en los Bonus se pone Si o No en dependencia de lo que uno estime que va a pasar.
 Ex:
 (2) Pirates vs Padres (10)
 
