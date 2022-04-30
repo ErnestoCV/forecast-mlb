@@ -1,0 +1,25 @@
+{
+  "name": "forecast-mlb",
+  "version": "0.1.0",
+  "description": "mlb",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ErnestoCV/forecast-mlb.git"
+  },
+  "author": "nesty",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ErnestoCV/forecast-mlb/issues"
+  },
+  "homepage": "https://github.com/ErnestoCV/forecast-mlb#readme",
+  "devDependencies": {
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  }
+}
