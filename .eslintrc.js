@@ -12,5 +12,6 @@ module.exports = {
   },
   rules: {
     'no-unused-vars': 'warn',
+    'linebreak-style': 0,
   },
 };
